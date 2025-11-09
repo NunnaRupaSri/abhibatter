@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABHI Homemade Batter & Chapati</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .font-telugu { font-family: 'Noto Sans Telugu', sans-serif; }
+        .font-hindi { font-family: 'Noto Sans Devanagari', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #f7fafc; }
+        [x-cloak] { display: none !important; }
+
+        /* Style for the product buttons */
+        .product-button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            background-color: #f9fafb; /* bg-gray-50 */
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+            border-radius: 0.5rem; /* rounded-lg */
+            font-weight: 600; /* font-semibold */
+            transition: all 0.2s;
+        }
+        .product-button:hover {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            border-color: #d1d5db; /* border-gray-300 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-6 md:p-12">
+
+    <div class="container mx-auto">
+        <h1 class="text-3xl md:text-5xl font-bold text-center text-[#ff6600] mb-10 font-inter leading-tight">
+            ABHI <br> Homemade Batter & Chapati
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+
+            <div class="font-inter bg-white rounded-2xl shadow-xl p-8 w-full transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
+                <h2 class="text-5xl font-bold text-center text-[#ff6600] mb-2">ABHI</h2>
+                <h3 class="text-3xl font-semibold text-center text-gray-600 mb-4 italic">Amma’s Love</h3>
+                <h4 class="text-2xl font-medium text-center text-gray-800 mb-6">Homemade & Authentic!</h4>
+                <ul class="space-y-3 mb-6">
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🥣 Idli Batter</span><span class="font-bold text-black">₹60 / Kg</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🥞 Dosa Batter</span><span class="font-bold text-black">₹70 / Kg</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🌾 Ragi Dosa Batter</span><span class="font-bold text-black">₹80 / Kg</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🌾 Ragi Idli Batter</span><span class="font-bold text-black">₹80 / Kg</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🌾 Jonna (Jowar) Idli Batter</span><span class="font-bold text-black">₹80 / Kg</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🍩 Vada Batter</span><span class="font-bold text-black">₹100 / Kg</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🍪 Wheat Chapati</span><span class="font-bold text-black">₹15 / piece</span></li>
+                </ul>
+
+                <div x-data="{ 
+                        modalOpen: false, 
+                        view: 'selection', 
+                        orderType: '', 
+                        selectedProduct: '', 
+                        selectedQuantity: '', 
+                        productPrices: {
+                            'Idli Batter': 60,
+                            'Dosa Batter': 70,
+                            'Ragi Dosa Batter': 80,
+                            'Ragi Idli Batter': 80,
+                            'Jonna (Jowar) Idli Batter': 80,
+                            'Vada Batter': 100,
+                            'Wheat Chapati': 15
+                        },
+                        deliveryChargePerKg: 10,
+                        flatDeliveryCharge: 10,
+
+                        parsedQuantity() {
+                            return parseInt(this.selectedQuantity) || 0;
+                        },
+                        calculateSubtotal() {
+                            return (this.productPrices[this.selectedProduct] || 0) * this.parsedQuantity();
+                        },
+                        calculateDeliveryCharge() {
+                            if (this.selectedProduct === 'Wheat Chapati') {
+                                return this.flatDeliveryCharge;
+                            }
+                            return this.parsedQuantity() * this.deliveryChargePerKg;
+                        },
+                        calculateTotal() {
+                            return this.calculateSubtotal() + this.calculateDeliveryCharge();
+                        }
+                    }" 
+                     @keydown.escape.window="modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''"
+                     class="text-center bg-gray-50 p-6 rounded-lg my-6 relative"> <p class="text-lg font-semibold text-black mb-2">📞 For orders, call:</p>
+                    <a href="tel:9848832921" class="text-2xl md:text-3xl font-bold text-blue-600 hover:text-blue-700">98488 32921</a>
+                    
+                    <button @click="modalOpen = true" class="mt-6 inline-block bg-black text-white text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg w-full md:w-auto">
+                        Click here to order
+                    </button>
+
+                    <div x-show="modalOpen" x-cloak 
+                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                         class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 overflow-y-auto">
+                        
+                        <div @click.outside="modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''" class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-auto">
+                            <button @click="modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                            
+                            <div x-show="view === 'selection'">
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-6">Choose Order Type</h3>
+                                <div class="space-y-4">
+                                    <button @click="view = 'products'; orderType = 'individual'" class="block w-full text-center bg-black text-white text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg">
+                                        Individual Order
+                                    </button>
+                                    <button @click="view = 'products'; orderType = 'bulk'" class="block w-full text-center bg-gray-200 text-black text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-300 transition-colors shadow-md hover:shadow-lg">
+                                        Bulk Order
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div x-show="view === 'products'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-6">Select a Product</h3>
+                                <div class="space-y-3 mb-6 max-h-60 overflow-y-auto">
+                                    <button @click="selectedProduct = 'Idli Batter'; view = 'quantity_kg'" class="product-button">🥣 Idli Batter</button>
+                                    <button @click="selectedProduct = 'Dosa Batter'; view = 'quantity_kg'" class="product-button">🥞 Dosa Batter</button>
+                                    <button @click="selectedProduct = 'Ragi Dosa Batter'; view = 'quantity_kg'" class="product-button">🌾 Ragi Dosa Batter</button>
+                                    <button @click="selectedProduct = 'Ragi Idli Batter'; view = 'quantity_kg'" class="product-button">🌾 Ragi Idli Batter</button>
+                                    <button @click="selectedProduct = 'Jonna (Jowar) Idli Batter'; view = 'quantity_kg'" class="product-button">🌾 Jonna (Jowar) Idli Batter</button>
+                                    <button @click="selectedProduct = 'Vada Batter'; view = 'quantity_kg'" class="product-button">🍩 Vada Batter</button>
+                                    <button @click="selectedProduct = 'Wheat Chapati'; view = 'quantity_pcs'" class="product-button">🍪 Wheat Chapati</button>
+                                </div>
+                                <button @click="view = 'selection'; orderType = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; Back
+                                </button>
+                            </div>
+
+                            <div x-show="view === 'quantity_kg'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-2">Select Quantity</h3>
+                                <p class="text-center text-lg font-semibold text-gray-700 mb-6" x-text="selectedProduct"></p>
+                                
+                                <div x-show="orderType === 'individual'">
+                                    <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '1 Kg'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">1 Kg</button>
+                                        <button @click="selectedQuantity = '2 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">2 Kgs</button>
+                                        <button @click="selectedQuantity = '3 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">3 Kgs</button>
+                                        <button @click="selectedQuantity = '4 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">4 Kgs</button>
+                                        <button @click="selectedQuantity = '5 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">5 Kgs</button>
+                                    </div>
+                                </div>
+                                <div x-show="orderType === 'bulk'">
+                                    <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '5 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">5 Kgs</button>
+                                        <button @click="selectedQuantity = '10 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">10 Kgs</button>
+                                        <button @click="selectedQuantity = '15 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">15 Kgs</button>
+                                        <button @click="selectedQuantity = '20 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">20 Kgs</button>
+                                        <button @click="selectedQuantity = '25 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">25 Kgs</button>
+                                    </div>
+                                </div>
+                                <button @click="view = 'products'; selectedProduct = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; Back to Products
+                                </button>
+                            </div>
+
+                            <div x-show="view === 'quantity_pcs'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-2">Select Quantity</h3>
+                                <p class="text-center text-lg font-semibold text-gray-700 mb-6" x-text="selectedProduct"></p>
+                                
+                                <div x-show="orderType === 'individual'">
+                                    <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '5 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">5 Pcs</button>
+                                        <button @click="selectedQuantity = '10 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">10 Pcs</button>
+                                        <button @click="selectedQuantity = '15 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">15 Pcs</button>
+                                        <button @click="selectedQuantity = '20 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">20 Pcs</button>
+                                        <button @click="selectedQuantity = '30 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">30 Pcs</button>
+                                    </div>
+                                </div>
+                                <div x-show="orderType === 'bulk'">
+                                     <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '50 Pcs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">50 Pcs</button>
+                                        <button @click="selectedQuantity = '100 Pcs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">100 Pcs</button>
+                                        <button @click="selectedQuantity = '150 Pcs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">150 Pcs</button>
+                                    </div>
+                                </div>
+                                <button @click="view = 'products'; selectedProduct = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; Back to Products
+                                </button>
+                            </div>
+
+                            <div x-show="view === 'summary'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-4">Confirm Your Order</h3>
+                                
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 text-left">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-3">Order Summary</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>Product:</span>
+                                            <span class="font-semibold" x-text="selectedProduct"></span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>Quantity:</span>
+                                            <span class="font-semibold" x-text="selectedQuantity"></span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>Subtotal:</span>
+                                            <span class="font-semibold">₹<span x-text="calculateSubtotal()"></span></span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>Delivery Charge:</span>
+                                            <span class="font-semibold">₹<span x-text="calculateDeliveryCharge()"></span></span>
+                                        </div>
+                                        <div class="flex justify-between text-black text-lg font-bold pt-2 border-t border-gray-300">
+                                            <span>Estimated Total:</span>
+                                            <span>₹<span x-text="calculateTotal()"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <a :href="'https://wa.me/919848832921?text=' + encodeURIComponent('Hi ABHI, I\'d like to order: \n\n*Product:* ' + selectedProduct + '\n*Quantity:* ' + selectedQuantity + '\n\n*Estimated Total:* ₹' + calculateTotal() + '\n\nPlease confirm my order and ask for my address.')"
+                                   target="_blank"
+                                   @click="$nextTick(() => { modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''; })"
+                                   class="block w-full text-center bg-black text-white text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg mt-4">
+                                    Confirm Order on WhatsApp
+                                </a>
+                                
+                                <button @click="view = (selectedProduct === 'Wheat Chapati' ? 'quantity_pcs' : 'quantity_kg'); selectedQuantity = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; Back to Quantity
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="space-y-3 mb-6 text-base">
+                    <li class="flex items-start text-gray-700"><span class="text-black mr-2 mt-1">✨</span><span>Fresh batter lovingly prepared at home</span></li>
+                    <li class="flex items-start text-gray-700"><span class="text-black mr-2 mt-1">✨</span><span>No cool storage – made fresh daily</span></li>
+                    <li class="flex items-start text-gray-700"><span class="text-black mr-2 mt-1">✨</span><span>No preservatives – 100% natural taste</span></li>
+                </ul>
+                <p class="text-gray-700 mb-4 text-center text-base">🛍 Custom orders available as per your taste!</p>
+                <p class="text-gray-700 mb-4 text-center text-base">📅 Place your order one day prior – delivered at your doorstep by 6 AM</p>
+                <p class="text-gray-700 mb-4 text-center text-base">🚚 Home Delivery Charge: ₹10 / Kg</p>
+                
+                <p class="text-center text-2xl font-bold text-black mt-8">💚 Pure Batter, Pure Health!</p>
+            </div>
+
+            <div class="font-telugu bg-white rounded-2xl shadow-xl p-8 w-full transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
+                <h2 class="text-5xl font-bold text-center text-[#ff6600] mb-2">అభి</h2>
+                <h3 class="text-3xl font-semibold text-center text-gray-600 mb-4 italic">అమ్మ ప్రేమతో</h3>
+                <h4 class="text-2xl font-medium text-center text-gray-800 mb-6">హోమ్ మేడ్ & ఆథెంటిక్!</h4>
+                <ul class="space-y-3 mb-6">
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🥣 ఇడ్లీ బ్యాటర్</span><span class="font-bold text-black">₹60 / కిలో</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🥞 దోసె బ్యాటర్</span><span class="font-bold text-black">₹70 / కిలో</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🌾 రాగి దోసె బ్యాటర్</span><span class="font-bold text-black">₹80 / కిలో</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🌾 రాగి ఇడ్లీ బ్యాటర్</span><span class="font-bold text-black">₹80 / కిలో</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🌾 జొన్న ఇడ్లీ బ్యాటర్</span><span class="font-bold text-black">₹80 / కిలో</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🍩 వడ బ్యాటర్</span><span class="font-bold text-black">₹100 / కిలో</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🍪 గోధుమ చపాతి</span><span class="font-bold text-black">₹15 / చపాతి</span></li>
+                </ul>
+
+                <div x-data="{ 
+                        modalOpen: false, 
+                        view: 'selection', 
+                        orderType: '', 
+                        selectedProduct: '', 
+                        selectedProductTelugu: '',
+                        selectedQuantity: '', 
+                        productPrices: {
+                            'Idli Batter': 60,
+                            'Dosa Batter': 70,
+                            'Ragi Dosa Batter': 80,
+                            'Ragi Idli Batter': 80,
+                            'Jonna (Jowar) Idli Batter': 80,
+                            'Vada Batter': 100,
+                            'Wheat Chapati': 15
+                        },
+                        deliveryChargePerKg: 10,
+                        flatDeliveryCharge: 10,
+
+                        parsedQuantity() {
+                            return parseInt(this.selectedQuantity) || 0;
+                        },
+                        calculateSubtotal() {
+                            return (this.productPrices[this.selectedProduct] || 0) * this.parsedQuantity();
+                        },
+                        calculateDeliveryCharge() {
+                            if (this.selectedProduct === 'Wheat Chapati') {
+                                return this.flatDeliveryCharge;
+                            }
+                            return this.parsedQuantity() * this.deliveryChargePerKg;
+                        },
+                        calculateTotal() {
+                            return this.calculateSubtotal() + this.calculateDeliveryCharge();
+                        }
+                    }" 
+                     @keydown.escape.window="modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''"
+                     class="text-center bg-gray-50 p-6 rounded-lg my-6 relative"> <p class="text-lg font-semibold text-black mb-2">📞 ఆర్డర్ కోసం కాల్ చేయండి:</p>
+                    <a href="tel:9848832921" class="text-2xl md:text-3xl font-bold text-blue-600 hover:text-blue-700">98488 32921</a>
+
+                    <button @click="modalOpen = true" class="font-inter mt-6 inline-block bg-black text-white text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg w-full md:w-auto">
+                        Click here to order
+                    </button>
+
+                    <div x-show="modalOpen" x-cloak 
+                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                         class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 overflow-y-auto">
+                        
+                        <div @click.outside="modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''" class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-auto">
+                            <button @click="modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                            
+                            <div x-show="view === 'selection'">
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-6">ఆర్డర్ రకాన్ని ఎంచుకోండి</h3>
+                                <div class="space-y-4">
+                                    <button @click="view = 'products'; orderType = 'individual'" class="block w-full text-center bg-black text-white text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg">
+                                        వ్యక్తిగత ఆర్డర్
+                                    </button>
+                                    <button @click="view = 'products'; orderType = 'bulk'" class="block w-full text-center bg-gray-200 text-black text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-300 transition-colors shadow-md hover:shadow-lg">
+                                        బల్క్ ఆర్డర్
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div x-show="view === 'products'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-6">ఉత్పత్తిని ఎంచుకోండి</h3>
+                                <div class="space-y-3 mb-6 max-h-60 overflow-y-auto">
+                                    <button @click="selectedProduct = 'Idli Batter'; selectedProductTelugu = 'ఇడ్లీ బ్యాటర్'; view = 'quantity_kg'" class="product-button">🥣 ఇడ్లీ బ్యాటర్</button>
+                                    <button @click="selectedProduct = 'Dosa Batter'; selectedProductTelugu = 'దోసె బ్యాటర్'; view = 'quantity_kg'" class="product-button">🥞 దోసె బ్యాటర్</button>
+                                    <button @click="selectedProduct = 'Ragi Dosa Batter'; selectedProductTelugu = 'రాగి దోసె బ్యాటర్'; view = 'quantity_kg'" class="product-button">🌾 రాగి దోసె బ్యాటర్</button>
+                                    <button @click="selectedProduct = 'Ragi Idli Batter'; selectedProductTelugu = 'రాగి ఇడ్లీ బ్యాటర్'; view = 'quantity_kg'" class="product-button">🌾 రాగి ఇడ్లీ బ్యాటర్</button>
+                                    <button @click="selectedProduct = 'Jonna (Jowar) Idli Batter'; selectedProductTelugu = 'జొన్న ఇడ్లీ బ్యాటర్'; view = 'quantity_kg'" class="product-button">🌾 జొన్న ఇడ్లీ బ్యాటర్</button>
+                                    <button @click="selectedProduct = 'Vada Batter'; selectedProductTelugu = 'వడ బ్యాటర్'; view = 'quantity_kg'" class="product-button">🍩 వడ బ్యాటర్</button>
+                                    <button @click="selectedProduct = 'Wheat Chapati'; selectedProductTelugu = 'గోధుమ చపాతి'; view = 'quantity_pcs'" class="product-button">🍪 గోధుమ చపాతి</button>
+                                </div>
+                                <button @click="view = 'selection'; orderType = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; వెనుకకు
+                                </button>
+                            </div>
+
+                            <div x-show="view === 'quantity_kg'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-2">పరిమాణాన్ని ఎంచుకోండి</h3>
+                                <p class="text-center text-lg font-semibold text-gray-700 mb-6" x-text="selectedProductTelugu"></p>
+                                
+                                <div x-show="orderType === 'individual'">
+                                    <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '1 Kg'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">1 కిలో</button>
+                                        <button @click="selectedQuantity = '2 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">2 కిలోలు</button>
+                                        <button @click="selectedQuantity = '3 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">3 కిలోలు</button>
+                                        <button @click="selectedQuantity = '4 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">4 కిలోలు</button>
+                                        <button @click="selectedQuantity = '5 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">5 కిలోలు</button>
+                                    </div>
+                                </div>
+                                <div x-show="orderType === 'bulk'">
+                                    <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '5 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">5 కిలోలు</button>
+                                        <button @click="selectedQuantity = '10 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">10 కిలోలు</button>
+                                        <button @click="selectedQuantity = '15 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">15 కిలోలు</button>
+                                        <button @click="selectedQuantity = '20 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">20 కిలోలు</button>
+                                        <button @click="selectedQuantity = '25 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">25 కిలోలు</button>
+                                    </div>
+                                </div>
+                                <button @click="view = 'products'; selectedProduct = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; ఉత్పత్తులకు వెనుకకు
+                                </button>
+                            </div>
+
+                            <div x-show="view === 'quantity_pcs'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-2">పరిమాణాన్ని ఎంచుకోండి</h3>
+                                <p class="text-center text-lg font-semibold text-gray-700 mb-6" x-text="selectedProductTelugu"></p>
+                                
+                                <div x-show="orderType === 'individual'">
+                                    <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '5 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">5 Pcs</button>
+                                        <button @click="selectedQuantity = '10 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">10 Pcs</button>
+                                        <button @click="selectedQuantity = '15 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">15 Pcs</button>
+                                        <button @click="selectedQuantity = '20 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">20 Pcs</button>
+                                        <button @click="selectedQuantity = '30 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">30 Pcs</button>
+                                    </div>
+                                </div>
+                                <div x-show="orderType === 'bulk'">
+                                     <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '50 Pcs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">50 Pcs</button>
+                                        <button @click="selectedQuantity = '100 Pcs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">100 Pcs</button>
+                                        <button @click="selectedQuantity = '150 Pcs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">150 Pcs</button>
+                                    </div>
+                                </div>
+                                <button @click="view = 'products'; selectedProduct = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; ఉత్పత్తులకు వెనుకకు
+                                </button>
+                            </div>
+
+                            <div x-show="view === 'summary'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-4">ఆర్డర్‌ని నిర్ధారించండి</h3>
+                                
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 text-left">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-3">ఆర్డర్ సారాంశం</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>ఉత్పత్తి:</span>
+                                            <span class="font-semibold" x-text="selectedProductTelugu"></span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>పరిమాణం:</span>
+                                            <span class="font-semibold" x-text="selectedQuantity"></span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>ఉపమొత్తం:</span>
+                                            <span class="font-semibold">₹<span x-text="calculateSubtotal()"></span></span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>డెలివరీ ఛార్జ్:</span>
+                                            <span class="font-semibold">₹<span x-text="calculateDeliveryCharge()"></span></span>
+                                        </div>
+                                        <div class="flex justify-between text-black text-lg font-bold pt-2 border-t border-gray-300">
+                                            <span>అంచనా మొత్తం:</span>
+                                            <span>₹<span x-text="calculateTotal()"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <a :href="'https://wa.me/919848832921?text=' + encodeURIComponent('నమస్కారం ABHI, నేను ఆర్డర్ చేయాలనుకుంటున్నాను: \n\n*ఉత్పత్తి:* ' + selectedProduct + '\n*పరిమాణం:* ' + selectedQuantity + '\n\n*అంచనా మొత్తం:* ₹' + calculateTotal() + '\n\nదయచేసి నా ఆర్డర్‌ని నిర్ధారించి, నా చిరునామా కోసం అడగండి.')"
+                                   target="_blank"
+                                   @click="$nextTick(() => { modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''; })"
+                                   class="font-inter block w-full text-center bg-black text-white text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg mt-4">
+                                    Confirm Order on WhatsApp
+                                </a>
+                                
+                                <button @click="view = (selectedProduct === 'Wheat Chapati' ? 'quantity_pcs' : 'quantity_kg'); selectedQuantity = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; పరిమాణానికి వెనుకకు
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="space-y-3 mb-6 text-base">
+                    <li class="flex items-start text-gray-700"><span class="text-black mr-2 mt-1">✨</span><span>ప్రేమతో ఇంట్లోనే తయారు చేసిన తాజా బ్యాటర్</span></li>
+                    <li class="flex items-start text-gray-700"><span class="text-black mr-2 mt-1">✨</span><span>కూల్ స్టోరేజ్ లేకుండా – రోజూ తాజా తయారీ</span></li>
+                    <li class="flex items-start text-gray-700"><span class="text-black mr-2 mt-1">✨</span><span>ప్రిజర్వేటివ్ లు లేవు – 100% సహజ రుచితో</span></li>
+                </ul>
+                <p class="text-gray-700 mb-4 text-center text-base">🛍 మీ రుచికి అనుగుణంగా కస్టమైజ్ ఆర్డర్స్ అందుబాటులో!</p>
+                <p class="text-gray-700 mb-4 text-center text-base">📅 ఒక రోజు ముందుగా ఆర్డర్ చేయండి – ఉదయం 6 గంటలకు మీ ఇంటి వద్దకు డెలివరీ!</p>
+                <p class="text-gray-700 mb-4 text-center text-base">🚚 హోమ్ డెలివరీ ఛార్జ్ ₹10 / కిలో</p>
+
+                <p class="text-center text-2xl font-bold text-black mt-8">💚 ప్యూర్ బ్యాటర్, ప్యూర్ హెల్త్!</p>
+            </div>
+
+            <div class="font-hindi bg-white rounded-2xl shadow-xl p-8 w-full transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
+                <h2 class="text-5xl font-bold text-center text-[#ff6600] mb-2">अभि</h2>
+                <h3 class="text-3xl font-semibold text-center text-gray-600 mb-4 italic">माँ के प्यार से</h3>
+                <h4 class="text-2xl font-medium text-center text-gray-800 mb-6">घर का बना और असली स्वाद!</h4>
+                <ul class="space-y-3 mb-6">
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🥣 इडली बैटर</span><span class="font-bold text-black">₹60 / किलो</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🥞 डोसा बैटर</span><span class="font-bold text-black">₹70 / किलो</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🌾 रागी डोसा बैटर</span><span class="font-bold text-black">₹80 / किलो</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🌾 रागी इडली बैटर</span><span class="font-bold text-black">₹80 / किलो</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🌾 ज्वार इडली बैटर</span><span class="font-bold text-black">₹80 / किलो</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🍩 वड़ा बैटर</span><span class="font-bold text-black">₹100 / किलो</span></li>
+                    <li class="flex justify-between items-center text-lg"><span class="text-gray-700">🍪 गेहूं की चपाती</span><span class="font-bold text-black">₹15 / पीस</span></li>
+                </ul>
+
+                <div x-data="{ 
+                        modalOpen: false, 
+                        view: 'selection', 
+                        orderType: '', 
+                        selectedProduct: '', 
+                        selectedProductHindi: '',
+                        selectedQuantity: '', 
+                        productPrices: {
+                            'Idli Batter': 60,
+                            'Dosa Batter': 70,
+                            'Ragi Dosa Batter': 80,
+                            'Ragi Idli Batter': 80,
+                            'Jonna (Jowar) Idli Batter': 80,
+                            'Vada Batter': 100,
+                            'Wheat Chapati': 15
+                        },
+                        deliveryChargePerKg: 10,
+                        flatDeliveryCharge: 10,
+
+                        parsedQuantity() {
+                            return parseInt(this.selectedQuantity) || 0;
+                        },
+                        calculateSubtotal() {
+                            return (this.productPrices[this.selectedProduct] || 0) * this.parsedQuantity();
+                        },
+                        calculateDeliveryCharge() {
+                            if (this.selectedProduct === 'Wheat Chapati') {
+                                return this.flatDeliveryCharge;
+                            }
+                            return this.parsedQuantity() * this.deliveryChargePerKg;
+                        },
+                        calculateTotal() {
+                            return this.calculateSubtotal() + this.calculateDeliveryCharge();
+                        }
+                    }" 
+                     @keydown.escape.window="modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''"
+                     class="text-center bg-gray-50 p-6 rounded-lg my-6 relative"> <p class="text-lg font-semibold text-black mb-2">📞 ऑर्डर के लिए कॉल करें:</p>
+                    <a href="tel:9848832921" class="text-2xl md:text-3xl font-bold text-blue-600 hover:text-blue-700">98488 32921</a>
+
+                    <button @click="modalOpen = true" class="font-inter mt-6 inline-block bg-black text-white text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg w-full md:w-auto">
+                        Click here to order
+                    </button>
+
+                    <div x-show="modalOpen" x-cloak 
+                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                         class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 overflow-y-auto">
+                        
+                        <div @click.outside="modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''" class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-auto">
+                            <button @click="modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                            
+                            <div x-show="view === 'selection'">
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-6">ऑर्डर का प्रकार चुनें</h3>
+                                <div class="space-y-4">
+                                    <button @click="view = 'products'; orderType = 'individual'" class="block w-full text-center bg-black text-white text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg">
+                                        व्यक्तिगत ऑर्डर
+                                    </button>
+                                    <button @click="view = 'products'; orderType = 'bulk'" class="block w-full text-center bg-gray-200 text-black text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-300 transition-colors shadow-md hover:shadow-lg">
+                                        बल्क ऑर्डर
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div x-show="view === 'products'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-6">उत्पाद चुनें</h3>
+                                <div class="space-y-3 mb-6 max-h-60 overflow-y-auto">
+                                    <button @click="selectedProduct = 'Idli Batter'; selectedProductHindi = 'इडली बैटर'; view = 'quantity_kg'" class="product-button">🥣 इडली बैटर</button>
+                                    <button @click="selectedProduct = 'Dosa Batter'; selectedProductHindi = 'डोसा बैटर'; view = 'quantity_kg'" class="product-button">🥞 डोसा बैटर</button>
+                                    <button @click="selectedProduct = 'Ragi Dosa Batter'; selectedProductHindi = 'रागी डोसा बैटर'; view = 'quantity_kg'" class="product-button">🌾 रागी डोसा बैटर</button>
+                                    <button @click="selectedProduct = 'Ragi Idli Batter'; selectedProductHindi = 'रागी इडली बैटर'; view = 'quantity_kg'" class="product-button">🌾 रागी इडली बैटर</button>
+                                    <button @click="selectedProduct = 'Jonna (Jowar) Idli Batter'; selectedProductHindi = 'ज्वार इडली बैटर'; view = 'quantity_kg'" class="product-button">🌾 ज्वार इडली बैटर</button>
+                                    <button @click="selectedProduct = 'Vada Batter'; selectedProductHindi = 'वड़ा बैटर'; view = 'quantity_kg'" class="product-button">🍩 वड़ा बैटर</button>
+                                    <button @click="selectedProduct = 'Wheat Chapati'; selectedProductHindi = 'गेहूं की चपाती'; view = 'quantity_pcs'" class="product-button">🍪 गेहूं की चपाती</button>
+                                </div>
+                                <button @click="view = 'selection'; orderType = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; वापस
+                                </button>
+                            </div>
+
+                            <div x-show="view === 'quantity_kg'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-2">मात्रा चुनें</h3>
+                                <p class="text-center text-lg font-semibold text-gray-700 mb-6" x-text="selectedProductHindi"></p>
+                                
+                                <div x-show="orderType === 'individual'">
+                                    <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '1 Kg'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">1 किलो</button>
+                                        <button @click="selectedQuantity = '2 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">2 किलो</button>
+                                        <button @click="selectedQuantity = '3 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">3 किलो</button>
+                                        <button @click="selectedQuantity = '4 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">4 किलो</button>
+                                        <button @click="selectedQuantity = '5 Kgs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">5 किलो</button>
+                                    </div>
+                                </div>
+                                <div x-show="orderType === 'bulk'">
+                                    <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '5 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">5 किलो</button>
+                                        <button @click="selectedQuantity = '10 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">10 किलो</button>
+                                        <button @click="selectedQuantity = '15 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">15 किलो</button>
+                                        <button @click="selectedQuantity = '20 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">20 किलो</button>
+                                        <button @click="selectedQuantity = '25 Kgs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">25 किलो</button>
+                                    </div>
+                                </div>
+                                <button @click="view = 'products'; selectedProduct = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; उत्पादों पर वापस
+                                </button>
+                            </div>
+
+                            <div x-show="view === 'quantity_pcs'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-2">मात्रा चुनें</h3>
+                                <p class="text-center text-lg font-semibold text-gray-700 mb-6" x-text="selectedProductHindi"></p>
+                                
+                                <div x-show="orderType === 'individual'">
+                                    <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '5 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">5 Pcs</button>
+                                        <button @click="selectedQuantity = '10 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">10 Pcs</button>
+                                        <button @click="selectedQuantity = '15 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">15 Pcs</button>
+                                        <button @click="selectedQuantity = '20 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">20 Pcs</button>
+                                        <button @click="selectedQuantity = '30 Pcs'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">30 Pcs</button>
+                                    </div>
+                                </div>
+                                <div x-show="orderType === 'bulk'">
+                                     <div class="grid grid-cols-3 gap-3 mb-4">
+                                        <button @click="selectedQuantity = '50 Pcs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">50 Pcs</button>
+                                        <button @click="selectedQuantity = '100 Pcs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">100 Pcs</button>
+                                        <button @click="selectedQuantity = '150 Pcs (Bulk)'; view = 'summary'" class="text-center bg-gray-100 text-black font-semibold py-3 px-2 rounded-lg hover:bg-gray-300 transition-colors">150 Pcs</button>
+                                    </div>
+                                </div>
+                                <button @click="view = 'products'; selectedProduct = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; उत्पादों पर वापस
+                                </button>
+                            </div>
+
+                            <div x-show="view === 'summary'" x-cloak>
+                                <h3 class="text-2xl font-bold text-center text-gray-900 mb-4">ऑर्डर की पुष्टि करें</h3>
+                                
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 text-left">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-3">ऑर्डर सारांश</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>उत्पाद:</span>
+                                            <span class="font-semibold" x-text="selectedProductHindi"></span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>मात्रा:</span>
+                                            <span class="font-semibold" x-text="selectedQuantity"></span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>उप-टोटल:</span>
+                                            <span class="font-semibold">₹<span x-text="calculateSubtotal()"></span></span>
+                                        </div>
+                                        <div class="flex justify-between text-gray-700">
+                                            <span>डिलिवरी चार्ज:</span>
+                                            <span class="font-semibold">₹<span x-text="calculateDeliveryCharge()"></span></span>
+                                        </div>
+                                        <div class="flex justify-between text-black text-lg font-bold pt-2 border-t border-gray-300">
+                                            <span>अनुमानित कुल:</span>
+                                            <span>₹<span x-text="calculateTotal()"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <a :href="'https://wa.me/919848832921?text=' + encodeURIComponent('नमस्ते ABHI, मैं ऑर्डर करना चाहता हूँ: \n\n*उत्पाद:* ' + selectedProduct + '\n*मात्रा:* ' + selectedQuantity + '\n\n*अनुमानित कुल:* ₹' + calculateTotal() + '\n\nकृपया मेरे ऑर्डर की पुष्टि करें और मेरा पता पूछें।')"
+                                   target="_blank"
+                                   @click="$nextTick(() => { modalOpen = false; view = 'selection'; orderType = ''; selectedProduct = ''; selectedQuantity = ''; })"
+                                   class="font-inter block w-full text-center bg-black text-white text-lg font-bold py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors shadow-md hover:shadow-lg mt-4">
+                                    Confirm Order on WhatsApp
+                                </a>
+                                
+                                <button @click="view = (selectedProduct === 'Wheat Chapati' ? 'quantity_pcs' : 'quantity_kg'); selectedQuantity = ''" class="w-full text-center text-blue-600 hover:text-blue-800 font-medium mt-4">
+                                    &larr; मात्रा पर वापस जाएं
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="space-y-3 mb-6 text-base">
+                    <li class="flex items-start text-gray-700"><span class="text-black mr-2 mt-1">✨</span><span>प्यार से घर पर ही ताज़ा तैयार किया गया बैटर</span></li>
+                    <li class="flex items-start text-gray-700"><span class="text-black mr-2 mt-1">✨</span><span>कोई कोल्ड स्टोरेज नहीं – रोज़ ताज़ा बनाया जाता है</span></li>
+                    <li class="flex items-start text-gray-700"><span class="text-black mr-2 mt-1">✨</span><span>कोई प्रिज़र्वेटिव नहीं – 100% प्राकृतिक स्वाद</span></li>
+                </ul>
+                <p class="text-gray-700 mb-4 text-center text-base">🛍 आपकी पसंद के अनुसार कस्टम ऑर्डर उपलब्ध!</p>
+                <p class="text-gray-700 mb-4 text-center text-base">📅 एक दिन पहले ऑर्डर करें – सुबह 6 बजे तक आपके दरवाज़े पर डिलीवरी!</p>
+                <p class="text-gray-700 mb-4 text-center text-base">🚚 होम डिलीवरी चार्ज ₹10 / किलो</p>
+
+                <p class="text-center text-2xl font-bold text-black mt-8">💚 शुद्ध बैटर, शुद्ध स्वास्थ्य!</p>
+            </div>
+
+        </div> 
+    </div> 
+</body>
+</html>
